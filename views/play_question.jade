@@ -1,8 +1,7 @@
 extends layout
 
 block content
-    div.span7.well
-        h4(style="text-align: center") Your Score: 0
+    div.span7.well#question
         form#play(qid=id)
             legend= question
             input.btn.btn-large.btn-block.answer(type="button",name="answer1",value=answer1)
