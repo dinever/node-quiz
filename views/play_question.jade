@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    div.span7.well
+        h4(style="text-align: center") Your Score: 0
+        div.progress.progress-striped.active
+            div.bar(style="width:100%", name="bar")
+        form#play(qid=id)
+            legend= question
+            input.btn.btn-large.btn-block.answer(type="button",name="answer1",value=answer1)
+            input.btn.btn-large.btn-block.answer(type="button",name="answer2",value=answer2)
+            input.btn.btn-large.btn-block.answer(type="button",name="answer3",value=answer3)
+            input.btn.btn-large.btn-block.answer(type="button",name="answer4",value=answer4)

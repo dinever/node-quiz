@@ -6,7 +6,7 @@ var app = express();
 
 app.configure(function(){
     app.set('port', 8080);
-    app.set('views', __dirname + '/app/views');
+    app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
     app.locals.pretty = true;
     //	app.use(express.favicon());
@@ -19,7 +19,7 @@ app.configure(function(){
 });
 
 var models = {};
-models.Question = require('./models/question').(mongoose).model;
+models.Question = require('./models/question')(mongoose).model;
 
 require('./routes')(app, models);
 
