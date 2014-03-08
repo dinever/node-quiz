@@ -18,6 +18,11 @@ app.configure(function(){
     app.use(express.static(__dirname + "/public"));
 });
 
+app.configure("development", function(){
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    mongoose.connect("mongodb://localhost/quizBank");
+});
+
 var models = {};
 models.Question = require('./models/question')(mongoose).model;
 
