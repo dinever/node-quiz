@@ -1,7 +1,7 @@
 $(function() {
-    $(".answer").click(function () {
+
+    function getNextQuestion (){
         var qid = $("#play").attr("qid");
-        console.log('click!');
         $.ajax({
             type: "POST",
             data: {
@@ -9,22 +9,33 @@ $(function() {
                 "answer": this.value
             },
             success: function(data) {
-                if (data == null) {
-                    alert("no more questions!");
+                if (data == 'nomorequestion') {
+                    alert('correct!');
+                    alert('no more questions!');
                 }
                 else{
-                    var form = $("<form></form>").attr('qid', data.id);
-                    form.append("<legend>" + data.title + "</legend>");
-                    for(var i = 0; i < data.answers.length; i++ )
-                    {
-                        var input = $('<input class="btn btn-large btn-block answer" type="button"/>').attr('name', 'answer'+i).attr('value', data.answers[i]);
-                        form.append(input);
+                    if(data != 'wrong'){
+                        setQuestion(data);
+                    }else{
+                        alert('wrong answer!');
                     }
-                    $("#question").html(form);
-                    alert(data.title);
                 }
             },
             url: '/answerQuestion'
         });
-    });
+    }
+
+    $('.answer').on('click', getNextQuestion);
+
+    function setQuestion(data){
+        var form = $("<form></form>").attr('id', 'play').attr('qid', data.id);
+        form.append("<legend>" + data.title + "</legend>");
+        for(var i = 0; i < data.answers.length; i++ )
+        {
+            var input = $('<input class="btn btn-large btn-block answer" type="button"/>').attr('name', 'answer'+i).attr('value', data.answers[i]);
+            form.append(input);
+        }
+        form.children('.answer').on('click', getNextQuestion);
+        $("#question").html(form);
+    }
 });

@@ -56,7 +56,7 @@ module.exports = function(app, models){
                         res.send(setQuestion(nextQuestion));
                     }
                     else{
-                        res.send(null);
+                        res.send('nomorequestion');
                     }
                 });
             }else{
