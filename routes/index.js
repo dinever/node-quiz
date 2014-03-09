@@ -74,14 +74,14 @@ module.exports = function(app, models){
     app.post('/quizManager/login', function(req, res) {
         req.method = "get";
         if(req.body.username === "demo" && req.body.password === "demo"){
-            res.redirect('/quizManager/');//req.session.originalRoute
             req.session.logged = true;
+            res.redirect('/quizManager/view');//req.session.originalRoute
         } else {
             res.redirect('/quizManager/login');
         }
     });
 
-    app.get('/quizManager/viewQuestions', function(req, res) {
+    app.get('/quizManager/view', function(req, res) {
         if(!req.session.logged) {
             req.session.originalRoute = req.path;
             res.redirect('/quizManager/login');
