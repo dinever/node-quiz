@@ -99,5 +99,18 @@ module.exports = function(app, models){
         res.render('createQuestion');
     });
 
+    app.post("/quizManager/submitQuestion", function(req, res) {
+        var title = req.body.question;
+        var correctAnswer = req.body.correctAnswer;
+        var wrongAnswers = [req.body.wrongAnswer1,
+            req.body.wrongAnswer2, req.body.wrongAnswer3];
 
+        new models.Question({
+            title: title,
+            answers: { correct: correctAnswer, incorrect: wrongAnswers}
+        }).save();
+
+        req.method = "get";
+        res.redirect("/quizManager/createQuestion");
+    });
 };
