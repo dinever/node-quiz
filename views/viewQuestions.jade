@@ -1,6 +1,5 @@
 extends layout
 block content
-    - for (var x = 0; x < questions.length; x++)
-        ul.list-group
-            li.list-group-item
-                a #{questions[x].title}
+    ul.list-group
+        -for (var x = 0; x < questions.length; x++)
+            li.list-group-item #{questions[x].title}
