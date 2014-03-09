@@ -38,4 +38,5 @@ $(function() {
         form.children('.answer').on('click', getNextQuestion);
         $("#question").html(form);
     }
+
 });

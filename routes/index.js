@@ -65,6 +65,10 @@ module.exports = function(app, models){
         })
     });
 
-
+    app.get("/quizManager/login", function(req, res) {
+        res.render("login.jade", {
+            title: title
+        });
+    });
 
 };
