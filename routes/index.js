@@ -95,5 +95,9 @@ module.exports = function(app, models){
         });
     });
 
+    app.get('/quizManager/createQuestion', function(req, res) {
+        res.render('createQuestion');
+    });
+
 
 };
