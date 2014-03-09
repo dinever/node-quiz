@@ -74,10 +74,34 @@ module.exports = function(app, models){
     app.post('/quizManager/login', function(req, res) {
         req.method = "get";
         if(req.body.username === "demo" && req.body.password === "demo"){
-            req.session.logged = true;
+            req.session.logged = true; //TODO
             res.redirect('/quizManager/view');//req.session.originalRoute
         } else {
             res.redirect('/quizManager/login');
+        }
+    });
+
+    app.get('/quizManager/register', function(req, res){
+        res.render('register', { errs : {}});
+    });
+
+    app.post('/quizManager/register', function(req, res){
+        if( req.body.password != req.body.repassword){
+            res.render('register', {errs: { password: 'Password not match, please try again.'}})
+        }else{
+            var user = {
+                username: req.body.username,
+                email: req.body.email,
+                password: req.body.password
+            };
+            models.User.addNewAccount(user, function (error){
+                if(error){
+                    res.render('register', error);
+                }else{
+                    req.session.logged = true; //TODO
+                    res.redirect('/quizManager/view');
+                }
+            });
         }
     });
 
@@ -104,7 +128,6 @@ module.exports = function(app, models){
         var correctAnswer = req.body.correctAnswer;
         var wrongAnswers = [req.body.wrongAnswer1,
             req.body.wrongAnswer2, req.body.wrongAnswer3];
-
         new models.Question({
             title: title,
             answers: { correct: correctAnswer, incorrect: wrongAnswers}

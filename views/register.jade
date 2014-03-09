@@ -1,0 +1,28 @@
+extends layout
+block content
+    div.row
+        div.col-md-4.col-centered
+            div.panel.panel-primary
+                div.panel-heading
+                    h3.panel-title Sign up
+                div.panel-body
+                    form(method='post',action='/quizManager/register')
+                        div.form-group
+                            label(for='id_username') Username
+                            if errs.username
+                                p
+                                    span.label.label-danger #{errs.username}
+                            input.form-control(type='text',name='username')
+                            label(for='useremail') Email
+                            if errs.email
+                                p
+                                    span.label.label-danger #{errs.email}
+                            input.form-control(type='email',name='email')
+                            label(for='password') Password
+                            if errs.password
+                                p
+                                    span.label.label-danger #{errs.password}
+                            input.form-control(type='password',name='password')
+                            label(for='password') Repeat Password
+                            input.form-control(type='password',name='repassword')
+                        input.btn.btn-default(type='submit' value='Log in')

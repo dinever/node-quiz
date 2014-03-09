@@ -25,6 +25,7 @@ app.configure("development", function(){
 
 var models = {};
 models.Question = require('./models/question')(mongoose).model;
+models.User = require('./models/user')(mongoose).model;
 
 require('./routes')(app, models);
 
