@@ -1,6 +1,10 @@
 extends layout
 block content
-    ul.list-group
-        -for (var x = 0; x < courses.length; x++)
-            li.list-group-item
-                a(href='#{courses[x].url}') #{courses[x].title}
+    section.content-header
+        h1 Dashboard
+            small Control panel
+    section.content
+        ul.list-group
+            -for (var x = 0; x < courses.length; x++)
+                li.list-group-item
+                    a(href='#{courses[x].url}') #{courses[x].title}

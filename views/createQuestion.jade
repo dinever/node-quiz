@@ -7,6 +7,8 @@ block content
                     h3.panel-title Add a new question
                 div.panel-body
                     form.form-group(method="post", action="/admin/submitQuestion")
+                        label Course:
+                        input.form-control(type="text", name="course", placeholder="Type the course name here").span6
                         label Question:
                         input.form-control(type="text", name="question", placeholder="Type the question here").span6
                         label Correct Answer:

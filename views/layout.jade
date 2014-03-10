@@ -1,21 +1,20 @@
-DOCTYPE
-html( ng-app )
+doctype html
+html
     head
         title= title
         link(href='/css/bootstrap.min.css', rel='stylesheet')
-    body
-        div.container
-            div.row.span12(style="margin-bottom: 0px")
-                div.page-header
-                    h2.centered-header Node Quiz
-                    block navbar
-                        include includes/navbar
-                block contentHolder
-                    block content
-                        div.span7.well
-                script(type='text/javascript', src='/js/jquery-1.9.1.min.js')
-                script(type='text/javascript', src='/js/bootstrap.min.js')
-                script(type='text/javascript', src='/js/node-quiz.js')
-            hr
-        footer.centered-header.container
-            p by <a href="https://dinever.com">Dinever</a>
+        link(href='/css/font-awesome.min.css', rel='stylesheet')
+        link(href='/css/ionicons.min.css', rel='stylesheet')
+        link(href='/css/AdminLTE.css', rel='stylesheet')
+    body.skin-black
+        header.header
+            a.logo(href='/') OverMemo
+            include includes/navbar
+        include includes/sidebar
+        aside.right-side
+            block content
+            footer.centered-header.container
+                p by <a href="https://dinever.com">Dinever</a>
+    script(type='text/javascript', src='/js/jquery-1.9.1.min.js')
+    script(type='text/javascript', src='/js/bootstrap.min.js')
+    script(type='text/javascript', src='/js/node-quiz.js')

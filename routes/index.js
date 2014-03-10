@@ -30,18 +30,20 @@ module.exports = function(app, models){
         return data;
     }
 
-    app.get("/play", function(req, res) {
-        models.Question.find(function(err, questions) {
-            var question = questions[0];
-            question = setQuestion(question);
-            res.render("play_question.jade", {
-                title: title,
-                question: question.title + " ?",
-                answer1: question.answers[0],
-                answer2: question.answers[1],
-                answer3: question.answers[2],
-                answer4: question.answers[3],
-                id: question.id
+    app.get("/:courseUrl/play", function(req, res) {
+        models.Course.findOne({url: req.params.courseUrl}, function(err, course){
+            models.Question.find({course: course._id}, function(err, questions) {
+                var question = questions[0];
+                question = setQuestion(question);
+                res.render("play_question.jade", {
+                    title: title,
+                    question: question.title + " ?",
+                    answer1: question.answers[0],
+                    answer2: question.answers[1],
+                    answer3: question.answers[2],
+                    answer4: question.answers[3],
+                    id: question.id
+                });
             });
         });
     });

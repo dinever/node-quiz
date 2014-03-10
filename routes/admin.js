@@ -1,5 +1,4 @@
 module.exports = function(app, models){
-    var title = 'haha';
     var adminURL = '/admin';
     app.get(adminURL + '/login', function(req, res) {
         res.render("login.jade");
@@ -49,7 +48,6 @@ module.exports = function(app, models){
         }
         models.Course.find(function(err, courses) {
             res.render('admin', {
-                title: title,
                 courses: courses
             });
         });
@@ -61,11 +59,13 @@ module.exports = function(app, models){
 
     app.post(adminURL + "/submitQuestion", function(req, res) {
         var title = req.body.question;
+        var courseId = '531d5d831a60fa2241afb654'; //TODO
         var correctAnswer = req.body.correctAnswer;
         var wrongAnswers = [req.body.wrongAnswer1,
             req.body.wrongAnswer2, req.body.wrongAnswer3];
         new models.Question({
             title: title,
+            course: courseId,
             answers: { correct: correctAnswer, incorrect: wrongAnswers}
         }).save();
 
@@ -91,9 +91,10 @@ module.exports = function(app, models){
     });
 
     app.get(adminURL + '/:course', function(req, res){
-        var course = req.params.course;
-        models.Question.find({course: course._id}, function (err, questions){
-            res.render('viewQuestions', { questions: questions});
+        models.Course.findOne({url: req.params.course}, function(err, course){
+            models.Question.find({course: course._id}, function (err, questions){
+                res.render('viewQuestions', { questions: questions});
+            });
         });
     });
 };
