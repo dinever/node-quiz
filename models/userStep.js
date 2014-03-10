@@ -3,12 +3,10 @@ module.exports = function(mongoose) {
     var ObjectId = Schema.ObjectId;
 
     var schema = new Schema({
-        title: String,
+        user: ObjectId,
         course: ObjectId,
-        answers: {
-            correct: String,
-            incorrect: [String] },
-        entered: {type: Date, default: Date.now}
+        step: Number,
+        repeatStep: {}
     });
 
     this.model = mongoose.model('Question', schema);

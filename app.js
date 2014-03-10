@@ -28,6 +28,7 @@ models.Question = require('./models/question')(mongoose).model;
 models.User = require('./models/user')(mongoose).model;
 
 require('./routes')(app, models);
+require('./routes/admin')(app, models);
 
 http.createServer(app).listen(app.get('port'), function() {
     console.log('Express server started, listening on port ' + app.get('port'));
