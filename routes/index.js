@@ -73,12 +73,14 @@ module.exports = function(app, models){
 
     app.post('/quizManager/login', function(req, res) {
         req.method = "get";
-        if(req.body.username === "demo" && req.body.password === "demo"){
-            req.session.logged = true; //TODO
-            res.redirect('/quizManager/view');//req.session.originalRoute
-        } else {
-            res.redirect('/quizManager/login');
-        }
+        models.User.findOne({username: req.body.username, password:req.body.password}, function(err, user){
+            if(user != null){
+                req.session.user = user;
+                res.redirect('/quizManager/view');
+            }else{
+                res.redirect('/quizManager/login');
+            }
+        });
     });
 
     app.get('/quizManager/register', function(req, res){
@@ -98,7 +100,7 @@ module.exports = function(app, models){
                 if(error){
                     res.render('register', error);
                 }else{
-                    req.session.logged = true; //TODO
+                    req.session.user = user.username;
                     res.redirect('/quizManager/view');
                 }
             });
@@ -106,7 +108,7 @@ module.exports = function(app, models){
     });
 
     app.get('/quizManager/view', function(req, res) {
-        if(!req.session.logged) {
+        if(!req.session.user) {
             req.session.originalRoute = req.path;
             res.redirect('/quizManager/login');
             return;
