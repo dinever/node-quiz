@@ -4,7 +4,14 @@ block content
         h1 Dashboard
             small Control panel
     section.content
-        ul.list-group
+        div.row
             -for (var x = 0; x < courses.length; x++)
-                li.list-group-item
-                    a(href='#{courses[x].url}') #{courses[x].title}
+                div.col-lg-3.col-xs-6
+                    div.small-box.bg-aqua
+                        div.inner
+                            h3 #{courses[x].title}
+                            p #{courses
+                        div.icon
+                            i.ion.ion-android-book
+                        a.small-box-footer(href='/#{courses[x].url}/play') Go to course
+                            i.fa.fa-arrow-circle-right
