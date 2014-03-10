@@ -1,28 +1,34 @@
-extends layout
-block content
-    div.row
-        div.col-md-4.col-centered
-            div.panel.panel-primary
-                div.panel-heading
-                    h3.panel-title Sign up
-                div.panel-body
-                    form(method='post',action='/admin/register')
-                        div.form-group
-                            label(for='id_username') Username
-                            if errs.username
-                                p
-                                    span.label.label-danger #{errs.username}
-                            input.form-control(type='text',name='username')
-                            label(for='useremail') Email
-                            if errs.email
-                                p
-                                    span.label.label-danger #{errs.email}
-                            input.form-control(type='email',name='email')
-                            label(for='password') Password
-                            if errs.password
-                                p
-                                    span.label.label-danger #{errs.password}
-                            input.form-control(type='password',name='password')
-                            label(for='password') Repeat Password
-                            input.form-control(type='password',name='repassword')
-                        input.btn.btn-default(type='submit' value='Log in')
+doctype html
+html.bg-black
+    head
+        title= title
+        link(href='/css/bootstrap.min.css', rel='stylesheet')
+        link(href='/css/font-awesome.min.css', rel='stylesheet')
+        link(href='/css/ionicons.min.css', rel='stylesheet')
+        link(href='/css/AdminLTE.css', rel='stylesheet')
+    body.bg-black
+        div.form-box#login-box
+            div.header Sign up
+
+            form(method='post')
+                div.body.bg-gray
+                    div.form-group
+                        if errs.username
+                            p.text-red #{errs.username}
+                        input.form-control(type='text',name='username',placeholder='Username')
+                    div.form-group
+                        if errs.email
+                            p.text-red #{errs.email}
+                        input.form-control(type='text',name='email',placeholder='Email')
+                    div.form-group
+                        if errs.password
+                            p.text-red #{errs.password}
+                        input.form-control(type='password',name='password',placeholder='Password')
+                    div.form-group
+                        input.form-control(type='password',name='repassword',placeholder='Repeat Password')
+                div.footer
+                    button.btn.bg-light-blue.btn-block(type='submie') Sign up
+                    a.btn.bg-olive.btn-block(href='/admin/login') Sign in
+    script(type='text/javascript', src='/js/jquery-1.9.1.min.js')
+    script(type='text/javascript', src='/js/bootstrap.min.js')
+    script(type='text/javascript', src='/js/node-quiz.js')

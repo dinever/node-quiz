@@ -6,15 +6,17 @@ html
         link(href='/css/font-awesome.min.css', rel='stylesheet')
         link(href='/css/ionicons.min.css', rel='stylesheet')
         link(href='/css/AdminLTE.css', rel='stylesheet')
-    body.skin-black
-        header.header
-            a.logo(href='/') OverMemo
-            include includes/navbar
-        include includes/sidebar
-        aside.right-side
-            block content
-            footer.centered-header.container
-                p by <a href="https://dinever.com">Dinever</a>
+    block body
+        body.skin-black
+            block header
+                header.header
+                    a.logo(href='/') OverMemo
+                    include includes/navbar
+                include includes/sidebar
+            aside.right-side
+                block content
+                footer.centered-header.container
+                    p by <a href="https://dinever.com">Dinever</a>
     script(type='text/javascript', src='/js/jquery-1.9.1.min.js')
     script(type='text/javascript', src='/js/bootstrap.min.js')
     script(type='text/javascript', src='/js/node-quiz.js')

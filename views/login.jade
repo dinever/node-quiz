@@ -1,15 +1,26 @@
-extends layout
-block content
-    div.row
-        div.col-md-4.col-centered
-            div.panel.panel-primary
-                div.panel-heading
-                    h3.panel-title Sign in
-                div.panel-body
-                    form(method='post',action='/admin/login')
-                        div.form-group
-                            label(for='id_username') Username
-                            input.form-control(type='text',name='username')
-                            label(for='password') Password
-                            input.form-control(type='password',name='password')
-                        input.btn.btn-default(type='submit' value='Log in')
+doctype html
+html.bg-black
+    head
+        title= title
+        link(href='/css/bootstrap.min.css', rel='stylesheet')
+        link(href='/css/font-awesome.min.css', rel='stylesheet')
+        link(href='/css/ionicons.min.css', rel='stylesheet')
+        link(href='/css/AdminLTE.css', rel='stylesheet')
+    body.bg-black
+        div.form-box#login-box
+            div.header Sign in
+            form(method='post')
+                div.body.bg-gray
+                    div.form-group
+                        input.form-control(type='text',name='username',placeholder='User ID')
+                    div.form-group
+                        input.form-control(type='password',name='password',placeholder='Password')
+                    div.form-group
+                        label
+                            <input type="checkbox" name="remember_me">Remember me</input>
+                div.footer
+                    button.btn.bg-light-blue.btn-block(type='submie') Sign in
+                    a.btn.bg-olive.btn-block(href='/admin/register') Sign up
+    script(type='text/javascript', src='/js/jquery-1.9.1.min.js')
+    script(type='text/javascript', src='/js/bootstrap.min.js')
+    script(type='text/javascript', src='/js/node-quiz.js')

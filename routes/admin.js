@@ -68,7 +68,12 @@ module.exports = function(app, models){
             course: courseId,
             answers: { correct: correctAnswer, incorrect: wrongAnswers}
         }).save();
-        models.Course.updateQuestionCount(courseId, models.Question);//TODO
+
+        models.Question.count({}, function(err, count){
+                models.Course.findByIdAndUpdate(courseId, { 'questionCount': count}, 'new', function(err, course){
+                    console.log(course);
+                });
+            });
 
         req.method = "get";
         res.redirect(adminURL + "/createQuestion");
