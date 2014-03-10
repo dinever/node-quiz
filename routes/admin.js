@@ -47,10 +47,10 @@ module.exports = function(app, models){
             res.redirect(adminURL + '/login');
             return;
         }
-        models.Question.find(function(err, questions) {
-            res.render('viewQuestions', {
+        models.Course.find(function(err, courses) {
+            res.render('admin', {
                 title: title,
-                questions: questions
+                courses: courses
             });
         });
     });
@@ -80,10 +80,20 @@ module.exports = function(app, models){
     app.post(adminURL + '/createCourse', function(req, res){
         var title = req.body.title;
         var description = req.body.description;
+        var url = req.body.url;
         new models.Course({
             title: title,
+            url: url,
             description: description
-        });
+        }).save();
+        req.method = 'get';
         res.redirect(adminURL + '/');
+    });
+
+    app.get(adminURL + '/:course', function(req, res){
+        var course = req.params.course;
+        models.Question.find({course: course._id}, function (err, questions){
+            res.render('viewQuestions', { questions: questions});
+        });
     });
 };

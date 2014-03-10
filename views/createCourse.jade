@@ -6,11 +6,13 @@ block content
                 div.panel-heading
                     h3.panel-title Add a new course
                 div.panel-body
-                    form.form-group(method="post", action="/admin/submitCourse")
+                    form.form-group(method="post", action="/admin/createCourse  ")
                         label Title:
-                        input.form-control(type="text", name="title", placeholder="Type the question here").span6
+                        input.form-control(type="text", name="title", placeholder="Type the title here").span6
+                        label URL:
+                        input.form-control(type="text", name="url", placeholder="Type the url which are displayed").span4
                         label Description:
-                        input.form-control(type="text", name="description", placeholder="Type correct answer").span4
+                        input.form-control(type="text", name="description", placeholder="Type description here").span4
                         br
                         div.btn-group.pull-right
                             input.btn.btn-default(type="button", value="Cancel", name="resetFormButton")
