@@ -2,8 +2,44 @@ module.exports = function(app, models){
     var title = "Node Quiz";
 
     app.get('/', function(req, res){
+        console.log(req.session.user);
         res.render('index', {
-            title: title
+            title: title,
+            user: req.session.user
+        });
+    });
+
+    function checkUser(req, res){
+        if(req.session.user){
+        }else{
+            res.redirect('/admin/login');
+        }
+    }
+
+    app.get('/courses', function(req, res){
+        checkUser(req, res);
+        models.Course.find(function(err, courses){
+            res.render('courses', {
+                courses: courses
+            });
+        });
+    });
+
+    app.get('/course/:course', function(req, res){
+        var url = req.params.course;
+        checkUser(req, res);
+        console.log(req.session.user);
+        console.log(url);
+        models.Course.findOne({url: url}, function(err, course){
+            console.log(course);
+            console.log(req.session.user);
+            models.userStatus.find({user: req.session.user._id, course: course._id}, function(err, result){
+                if(result != null){
+                    res.render('courseDetail', { course: course, joined: true});//TODO: Need courseDetail view
+                }else{
+                    res.render('courseDetail', { course: course, joined: false});
+                }
+            });
         });
     });
 

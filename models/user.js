@@ -1,6 +1,6 @@
 module.exports = function(mongoose){
     var Schema = mongoose.Schema;
-    var ObjectId = Schema.ObjectId;
+    //var ObjectId = Schema.ObjectId;
 
     var schema = new Schema({
         username: String,
@@ -21,8 +21,8 @@ module.exports = function(mongoose){
                     if (o){
                         callback({errs: { email: 'Please use a valid email address.'}});
                     }else{
-                        new user(newData).save();
-                        callback(null);
+                        newUser = new user(newData).save();
+                        callback(null, newUser);
                     }
                 });
             }

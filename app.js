@@ -15,7 +15,7 @@ models.Question = require('./models/question')(mongoose).model;
 models.User = require('./models/user')(mongoose).model;
 models.Course = require('./models/course')(mongoose).model;
 models.answerLog = require('./models/answerLog')(mongoose).model;
-models.userStep = require('./models/userStatus')(mongoose).model;
+models.userStatus = require('./models/userStatus')(mongoose).model;
 
 require('./routes')(app, models);
 require('./routes/admin')(app, models);

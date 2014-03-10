@@ -9,6 +9,9 @@ module.exports = function(app, models){
         models.User.findOne({username: req.body.username, password:req.body.password}, function(err, user){
             if(user != null){
                 req.session.user = user;
+                app.locals({
+                    user: user
+                });
                 res.redirect(adminURL + '/');
             }else{
                 res.redirect(adminURL + '/login');
@@ -29,11 +32,11 @@ module.exports = function(app, models){
                 email: req.body.email,
                 password: req.body.password
             };
-            models.User.addNewAccount(user, function (error){
+            models.User.addNewAccount(user, function (error, result){
                 if(error){
                     res.render('register', error);
                 }else{
-                    req.session.user = user.username;
+                    req.session.user = result;
                     res.redirect(adminURL + '/');
                 }
             });
