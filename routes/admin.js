@@ -54,7 +54,11 @@ module.exports = function(app, models){
     });
 
     app.get(adminURL + '/createQuestion', function(req, res) {
-        res.render('createQuestion');
+        models.Course.find(function(err, courses){
+            res.render('createQuestion', {
+                courses: courses
+            });
+        });
     });
 
     app.post(adminURL + "/submitQuestion", function(req, res) {

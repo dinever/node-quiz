@@ -9,7 +9,7 @@ module.exports = function(mongoose) {
         repeatStep: {}
     });
 
-    this.model = mongoose.model('userStep', schema);
+    this.model = mongoose.model('userStatus', schema);
 
     return this;
 };

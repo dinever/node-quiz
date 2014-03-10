@@ -1,23 +1,9 @@
 var express = require('express');
 var http = require('http');
 var mongoose = require('mongoose');
-
 var app = express();
 
-app.configure(function(){
-    app.set('port', 8080);
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-    app.locals.pretty = true;
-    //	app.use(express.favicon());
-    //	app.use(express.logger('dev'));
-    app.use(express.urlencoded());
-    app.use(express.bodyParser());
-    app.use(express.cookieParser());
-    app.use(express.session({ secret: 'super-duper-secret-secret' }));
-    app.use(express.methodOverride());
-    app.use(express.static(__dirname + "/public"));
-});
+var config = require("./config")(app, express);
 
 app.configure("development", function(){
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
@@ -29,7 +15,7 @@ models.Question = require('./models/question')(mongoose).model;
 models.User = require('./models/user')(mongoose).model;
 models.Course = require('./models/course')(mongoose).model;
 models.answerLog = require('./models/answerLog')(mongoose).model;
-models.userStep = require('./models/userStep')(mongoose).model;
+models.userStep = require('./models/userStatus')(mongoose).model;
 
 require('./routes')(app, models);
 require('./routes/admin')(app, models);
