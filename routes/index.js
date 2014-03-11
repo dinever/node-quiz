@@ -2,7 +2,6 @@ module.exports = function(app, models){
     var title = "Node Quiz";
 
     app.get('/', function(req, res){
-        console.log(req.session.user);
         res.render('index', {
             title: title,
             user: req.session.user
@@ -94,26 +93,58 @@ module.exports = function(app, models){
         });
     });
 
+    function setRepeatStep(question, step, repeatStep){
+        if(repeatStep[step] != null){
+            step ++;
+            setRepeatStep(question, step, repeatStep)
+        }else{
+            repeatStep[step] = question;
+        }
+    }
+
     app.post('/course/:courseURL/answer', authenticate, function(req, res) {
-        console.log('haha');
         var qid = req.param('id');
-        models.Question.findById(qid, function (err, question) {
-            if (question.answers.correct == req.param('answer')) {
-                models.Question.findOne().where('_id').gt(question._id).exec( function (err, nextQuestion) {
-                    if (err) { throw err; }
-                    if (nextQuestion) {
-                        res.send(setQuestion(nextQuestion));
+        models.Course.findOne({url: req.params.courseURL}, function(err, course){
+
+            models.Question.findById(qid, function (err, question) {
+                models.userStatus.findOneAndUpdate({user: req.session.user._id, course: course}, {$inc: {step: 1}}, {upsert: true}, function(err, status){
+                    if (question.answers.correct == req.param('answer')) {
+                        models.Question.findOne().where('_id').gt(question._id).exec( function (err, nextQuestion) {
+                            if (err) { throw err; }
+                            if (nextQuestion) {
+                                res.send(setQuestion(nextQuestion));
+                            }
+                            else{
+                                res.send('nomorequestion');
+                            }
+                        });
+                    }else{
+                        models.answerLog.findOneAndUpdate({user: req.session.user._id, question: question}, {$inc: {mistakes: 1}, easinessFactor: 2.5}, {upsert: true}, function(err, answerlog){
+                            var q = 4;
+                            var EF = answerlog.easinessFactor+(0.1-(5-q)*(0.08+(5-q)*0.02));
+                            models.answerLog.findOneAndUpdate({user: req.session.user._id, question: question}, {easinessFactor: EF}, function(){
+                                if(status.repeatStep == null){
+                                    repeatStep = {};
+                                }else{
+                                    repeatStep = status.repeatStep;
+                                }
+                                restep = [1, 6, 13, 32, 78, 195];
+                                for(var i = 0; i < restep.length; i++){
+                                    step = restep[i] + status.step;
+                                    setRepeatStep(question._id, step, repeatStep);
+                                    }
+                                models.userStatus.findOneAndUpdate({user: req.session.user._id, course: course}, {repeatStep: repeatStep}, {upsert: true}, function(err, status){
+
+                                });
+                                res.send('wrong');
+                            });
+                        });
                     }
-                    else{
-                        res.send('nomorequestion');
-                    }
+
                 });
-            }else{
-                models.answerLog.findOneAndUpdate({user: req.session.user._id, question: question}, {$inc: { mistakes: 1}, easinessFactor: 2.5}, {upsert: true}, function(err, answerlog){
-                    console.log(answerlog);
-                res.send('wrong');
-                });
-            }
-        })
+            });
+
+        });
+
     });
 };

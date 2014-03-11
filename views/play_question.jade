@@ -2,6 +2,8 @@ extends layout
 
 block content
     div.span7.well#question
+        div.progress.progress-striped.active
+            div.progress-bar.bar(style="width:100%", name="bar")
         form#play(qid=id)
             legend= question
             input.btn.btn-large.btn-block.answer(type="button",name="answer1",value=answer1)

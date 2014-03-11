@@ -1,12 +1,34 @@
 $(function() {
+    var totalSeconds = 30;
+    var seconds = totalSeconds;
+
+    var myTimer = setInterval(function() {
+        var width = seconds<30 ? (10 * seconds / 30) * 10 : 100;
+
+        seconds -= 0.10;
+
+        if (seconds <= 0) {
+            clearInterval(myTimer);
+            width = 0;
+            seconds = 0;
+        } else if (seconds <= 10) {
+
+        }
+
+        $('.bar').css('width', width + '%');
+    }, 100);
 
     function getNextQuestion (){
+        console.log(totalSeconds);
+        console.log(seconds);
         var qid = $("#play").attr("qid");
         $.ajax({
             type: "POST",
             data: {
                 "id": qid,
-                "answer": this.value
+                "answer": this.value,
+                "responseTime": totalSeconds - seconds,
+                "totalTime": totalSeconds
             },
             success: function(data) {
                 if (data == 'nomorequestion') {
