@@ -9,39 +9,13 @@ module.exports = function(app, models){
         });
     });
 
-    function checkUser(req, res){
+    var authenticate = function (req, res, next) {
         if(req.session.user){
+            next();
         }else{
             res.redirect('/admin/login');
         }
-    }
-
-    app.get('/courses', function(req, res){
-        checkUser(req, res);
-        models.Course.find(function(err, courses){
-            res.render('courses', {
-                courses: courses
-            });
-        });
-    });
-
-    app.get('/course/:course', function(req, res){
-        var url = req.params.course;
-        checkUser(req, res);
-        console.log(req.session.user);
-        console.log(url);
-        models.Course.findOne({url: url}, function(err, course){
-            console.log(course);
-            console.log(req.session.user);
-            models.userStatus.find({user: req.session.user._id, course: course._id}, function(err, result){
-                if(result != null){
-                    res.render('courseDetail', { course: course, joined: true});//TODO: Need courseDetail view
-                }else{
-                    res.render('courseDetail', { course: course, joined: false});
-                }
-            });
-        });
-    });
+    };
 
     function setQuestion(question){
         data = {
@@ -66,8 +40,44 @@ module.exports = function(app, models){
         return data;
     }
 
-    app.get("/:courseUrl/play", function(req, res) {
-        models.Course.findOne({url: req.params.courseUrl}, function(err, course){
+    app.get('/course', authenticate, function(req, res){
+        models.Course.find(function(err, courses){
+            res.render('courses', {
+                courses: courses
+            });
+        });
+    });
+
+    app.get('/course/:courseURL', authenticate, function(req, res){
+        var url = req.params.courseURL;
+        models.Course.findOne({url: url}, function(err, course){
+            models.userStatus.find({user: req.session.user._id, course: course._id}, function(err, result){
+                if(result != null){
+                    res.render('courseDetail', { course: course, joined: true});//TODO: Need courseDetail view
+                }else{
+                    res.render('courseDetail', { course: course, joined: false});
+                }
+            });
+        });
+    });
+
+    app.post('/course/:courseURL/join', authenticate, function(req, res){
+        var url = req.params.courseURL;
+        checkUser(req, res);
+        models.Course.findOne({url: url}, function(err, course){
+            models.userStatus.findOne({user: req.params.user.id, course: course.id}, function(err, status){
+                if(status == null){
+                    new models.userStatus({user: req.params.user._id, course: course.id, step: 1, repeatStep: []}).save();
+                    res.send('ok');
+                }else{
+                    res.send('already_joined');
+                }
+            });
+        });
+    });
+
+    app.get("/course/:courseURL/go", authenticate, function(req, res) {
+        models.Course.findOne({url: req.params.courseURL}, function(err, course){
             models.Question.find({course: course._id}, function(err, questions) {
                 var question = questions[0];
                 question = setQuestion(question);
@@ -84,7 +94,8 @@ module.exports = function(app, models){
         });
     });
 
-    app.post('/answerQuestion', function(req, res) {
+    app.post('/course/:courseURL/answer', authenticate, function(req, res) {
+        console.log('haha');
         var qid = req.param('id');
         models.Question.findById(qid, function (err, question) {
             if (question.answers.correct == req.param('answer')) {
@@ -98,7 +109,10 @@ module.exports = function(app, models){
                     }
                 });
             }else{
+                models.answerLog.findOneAndUpdate({user: req.session.user._id, question: question}, {$inc: { mistakes: 1}, easinessFactor: 2.5}, {upsert: true}, function(err, answerlog){
+                    console.log(answerlog);
                 res.send('wrong');
+                });
             }
         })
     });

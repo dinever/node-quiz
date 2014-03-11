@@ -21,7 +21,7 @@ $(function() {
                     }
                 }
             },
-            url: '/answerQuestion'
+            url: './answer'
         });
     }
 
