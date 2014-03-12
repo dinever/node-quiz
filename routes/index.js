@@ -78,16 +78,26 @@ module.exports = function(app, models){
     app.get("/course/:courseURL/go", authenticate, function(req, res) {
         models.Course.findOne({url: req.params.courseURL}, function(err, course){
             models.Question.find({course: course._id}, function(err, questions) {
-                var question = questions[0];
-                question = setQuestion(question);
-                res.render("goCourse.jade", {
-                    title: title,
-                    question: question.title + " ?",
-                    answer1: question.answers[0],
-                    answer2: question.answers[1],
-                    answer3: question.answers[2],
-                    answer4: question.answers[3],
-                    id: question.id
+                models.userStatus.findOne({
+                    user: req.session.user._id,
+                    course: course
+                }, function(err, status){
+                    if(status.lastQuestion == null){
+                        question = questions[0];
+                    }
+                    else{
+
+                    }
+                    question = setQuestion(question);
+                    res.render("goCourse.jade", {
+                        title: title,
+                        question: question.title + " ?",
+                        answer1: question.answers[0],
+                        answer2: question.answers[1],
+                        answer3: question.answers[2],
+                        answer4: question.answers[3],
+                        id: question.id
+                    });
                 });
             });
         });

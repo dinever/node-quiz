@@ -6,6 +6,7 @@ module.exports = function(mongoose) {
         user: ObjectId,
         course: ObjectId,
         step: Number,
+        lastQuestion: ObjectId,
         repeatStep: {}
     });
 
