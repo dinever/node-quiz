@@ -37,9 +37,10 @@ $(function() {
                 }
                 else{
                     if(data != 'wrong'){
-                        setQuestion(data);
+                        setQuestion(data.nextQuestion);
                     }else{
                         alert('wrong answer!');
+                        setQuestion(data.nextQuestion);
                     }
                 }
             },

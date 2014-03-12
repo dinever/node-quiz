@@ -8,6 +8,7 @@ module.exports = function(mongoose) {
         answers: {
             correct: String,
             incorrect: [String] },
+        explanation: String,
         entered: {type: Date, default: Date.now}
     });
 
