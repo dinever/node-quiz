@@ -1,12 +1,19 @@
 extends layout
 
 block content
-    div.span7.well#question
-        div.progress.progress-striped.active
-            div.progress-bar.bar(style="width:100%", name="bar")
-        form#play(qid=id)
-            legend= question
-            input.btn.btn-large.btn-block.answer(type="button",name="answer1",value=answer1)
-            input.btn.btn-large.btn-block.answer(type="button",name="answer2",value=answer2)
-            input.btn.btn-large.btn-block.answer(type="button",name="answer3",value=answer3)
-            input.btn.btn-large.btn-block.answer(type="button",name="answer4",value=answer4)
+    section.content-header
+        h1 Play
+    section.content
+        div.row
+            div.col-md-12
+                div.progress.progress-striped.active
+                    div.progress-bar.bar(style="width:100%", name="bar")
+            div.col-md-8
+                div.box.box-solid
+                    div.box-body#question
+                        form#play(qid=id)
+                            legend= question
+                            input.btn.btn-default.btn-block.btn-flat.answer(type="button",name="answer1",value=answer1)
+                            input.btn.btn-default.btn-block.btn-flat.answer(type="button",name="answer2",value=answer2)
+                            input.btn.btn-default.btn-block.btn-flat.answer(type="button",name="answer3",value=answer3)
+                            input.btn.btn-default.btn-block.btn-flat.answer(type="button",name="answer4",value=answer4)

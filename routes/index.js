@@ -137,9 +137,17 @@ module.exports = function(app, models){
                                         repeatStep = {};
                                     }else{
                                         repeatStep = status.repeatStep;
+                                        for(var i in repeatStep){
+                                            if(repeatStep.hasOwnProperty(i) && repeatStep[i] == question.id){
+                                                console.log('True!');
+                                                delete repeatStep[i];
+                                            }else{
+                                                console.log('False');
+                                            }
+                                        }
                                     }
-                                    restep = [1, 6, 13, 32, 78, 195];
-                                    for(var i = 0; i < restep.length; i++){
+                                    restep = [2, 7, 14, 33, 78, 195];
+                                    for(i = 0; i < restep.length; i++){
                                         step = restep[i] + status.step;
                                         setRepeatStep(question._id, step, repeatStep);
                                         }

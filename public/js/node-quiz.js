@@ -55,7 +55,7 @@ $(function() {
         form.append("<legend>" + data.title + "</legend>");
         for(var i = 0; i < data.answers.length; i++ )
         {
-            var input = $('<input class="btn btn-large btn-block answer" type="button"/>').attr('name', 'answer'+i).attr('value', data.answers[i]);
+            var input = $('<input class="btn btn-default btn-block btn-flat answer" type="button"/>').attr('name', 'answer'+i).attr('value', data.answers[i]);
             form.append(input);
         }
         form.children('.answer').on('click', getNextQuestion);
