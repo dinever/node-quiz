@@ -1,5 +1,14 @@
 module.exports = function(app, models){
     var adminURL = '/admin';
+
+    var authenticate = function (req, res, next) {
+        if(req.session.user){
+            next();
+        }else{
+            res.redirect('/admin/login');
+        }
+    };
+
     app.get(adminURL + '/login', function(req, res) {
         res.render("login.jade");
     });
@@ -43,12 +52,7 @@ module.exports = function(app, models){
         }
     });
 
-    app.get(adminURL + '/', function(req, res) {
-        if(!req.session.user) {
-            req.session.originalRoute = req.path;
-            res.redirect(adminURL + '/login');
-            return;
-        }
+    app.get(adminURL + '/', authenticate, function(req, res) {
         models.Course.find(function(err, courses) {
             res.render('admin', {
                 courses: courses
@@ -56,7 +60,7 @@ module.exports = function(app, models){
         });
     });
 
-    app.get(adminURL + '/createQuestion', function(req, res) {
+    app.get(adminURL + '/createQuestion', authenticate, function(req, res) {
         models.Course.find(function(err, courses){
             res.render('createQuestion', {
                 courses: courses
@@ -64,7 +68,7 @@ module.exports = function(app, models){
         });
     });
 
-    app.post(adminURL + "/submitQuestion", function(req, res) {
+    app.post(adminURL + "/submitQuestion", authenticate, function(req, res) {
         var title = req.body.question;
         var courseId = '531d5d831a60fa2241afb654'; //TODO
         var correctAnswer = req.body.correctAnswer;
@@ -86,11 +90,11 @@ module.exports = function(app, models){
         res.redirect(adminURL + "/createQuestion");
     });
 
-    app.get(adminURL + '/createCourse', function(req, res){
+    app.get(adminURL + '/createCourse', authenticate, function(req, res){
         res.render('createCourse');
     });
 
-    app.post(adminURL + '/createCourse', function(req, res){
+    app.post(adminURL + '/createCourse', authenticate, function(req, res){
         var title = req.body.title;
         var description = req.body.description;
         var url = req.body.url;
@@ -103,7 +107,7 @@ module.exports = function(app, models){
         res.redirect(adminURL + '/');
     });
 
-    app.get(adminURL + '/:course', function(req, res){
+    app.get(adminURL + '/:course', authenticate, function(req, res){
         models.Course.findOne({url: req.params.course}, function(err, course){
             models.Question.find({course: course._id}, function (err, questions){
                 res.render('viewQuestions', { questions: questions});
