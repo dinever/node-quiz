@@ -5,13 +5,38 @@ block content
             small Control panel
     section.content
         div.row
-            -for (var x = 0; x < courses.length; x++)
-                div.col-lg-3.col-xs-6
-                    div.small-box.bg-aqua
-                        div.inner
-                            h3 #{courses[x].title}
-                            p #{courses[x].questionCount} Exercises
-                        div.icon
-                            i.ion.ion-android-book
-                        a.small-box-footer(href='/course/#{courses[x].url}/go') Go to course
-                            i.fa.fa-arrow-circle-right
+            div.col-md-6
+                div.box
+                    div.box-header
+                        h3.box-title Courses
+                    div.box-body
+                        table.table.table-bordered
+                            tbody
+                                tr
+                                    th #
+                                    th Title
+                                    th Description
+                                    th Question Count
+                                -for (var x = 0; x < courses.length; x++)
+                                    tr
+                                        th #{x}
+                                        th #{courses[x].title}
+                                        th #{courses[x].description}
+                                        th #{courses[x].questionCount}
+                    div.box-footer.clearfix
+            div.col-md-6
+                div.box
+                    div.box-header
+                        h3.box-title User
+                    div.box-body
+                        table.table.table-bordered
+                            tbody
+                                tr
+                                    th #
+                                    th Username
+                                    th Email
+                                -for (var x = 0; x < users.length; x++)
+                                    tr
+                                        th #{x}
+                                        th #{users[x].username}
+                                        th #{users[x].email}

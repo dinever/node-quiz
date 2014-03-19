@@ -1,4 +1,6 @@
 module.exports = function(app, models){
+    var crypto = require('crypto');
+
     var adminURL = '/admin';
 
     var authenticate = function (req, res, next) {
@@ -9,19 +11,56 @@ module.exports = function(app, models){
         }
     };
 
+    var generateSalt = function()
+    {
+        var set = '0123456789abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ';
+        var salt = '';
+        for (var i = 0; i < 10; i++) {
+            var p = Math.floor(Math.random() * set.length);
+            salt += set[p];
+        }
+        return salt;
+    };
+
+    var md5 = function(str) {
+        return crypto.createHash('md5').update(str).digest('hex');
+    };
+
+    var saltAndHash = function(pass, callback)
+    {
+        var salt = generateSalt();
+        callback(salt + md5(pass + salt));
+    };
+
+    var validatePassword = function(plainPass, hashedPass, callback)
+    {
+        var salt = hashedPass.substr(0, 10);
+        var validHash = salt + md5(plainPass + salt);
+        callback(null, hashedPass === validHash);
+    };
+
     app.get(adminURL + '/login', function(req, res) {
         res.render("login.jade");
     });
 
     app.post(adminURL + '/login', function(req, res) {
         req.method = "get";
-        models.User.findOne({username: req.body.username, password:req.body.password}, function(err, user){
+        var username = req.body.username;
+        var password = req.body.password;
+
+        models.User.findOne({username: username}, function(err, user){
             if(user != null){
-                req.session.user = user;
-                app.locals({
-                    user: user
+                validatePassword(password, user.password, function(err, o){
+                    if(o){
+                        req.session.user = user;
+                        app.locals({
+                            user: user
+                        });
+                        res.redirect(adminURL + '/');
+                    }else{
+                        res.render('login', {errs: {username: 'Wrong username or password'}});
+                    }
                 });
-                res.redirect(adminURL + '/');
             }else{
                 res.redirect(adminURL + '/login');
             }
@@ -41,21 +80,27 @@ module.exports = function(app, models){
                 email: req.body.email,
                 password: req.body.password
             };
-            models.User.addNewAccount(user, function (error, result){
-                if(error){
-                    res.render('register', error);
-                }else{
-                    req.session.user = result;
-                    res.redirect(adminURL + '/');
-                }
+            saltAndHash(user.password, function(hash){
+                user.password = hash;
+                models.User.addNewAccount(user, function (error, result){
+                    if(error){
+                        res.render('register', error);
+                    }else{
+                        req.session.user = result;
+                        res.redirect(adminURL + '/');
+                    }
+                });
             });
         }
     });
 
     app.get(adminURL + '/', authenticate, function(req, res) {
         models.Course.find(function(err, courses) {
-            res.render('admin', {
-                courses: courses
+            models.User.find(function(err, users){
+                res.render('admin', {
+                    courses: courses,
+                    users: users
+                });
             });
         });
     });
